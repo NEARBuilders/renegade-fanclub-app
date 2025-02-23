@@ -60,6 +60,7 @@ import {
 import { CopyLink } from "@/components/ui/copy-link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { usePathname } from "next/navigation";
 
 export default async function ProfilePage() {
   const [profile, completedQuests, predictions, teams, games] =
@@ -74,8 +75,6 @@ export default async function ProfilePage() {
   // Create maps for team names and game details
   const teamMap = new Map(teams.map((team) => [team.id, team.name]));
   const gameMap = new Map(games.map((game) => [game.id, game]));
-
-  const origin = headers().get("origin") || "";
 
   return (
     <>
@@ -225,6 +224,11 @@ export default async function ProfilePage() {
               </div>
             </CardContent>
           </Card>
+          <CopyLink
+            title="Refer a Friend"
+            description="Earn more points"
+            link={"/invite?ref=" + profile.id}
+          />
         </div>
       </Container>
     </>
