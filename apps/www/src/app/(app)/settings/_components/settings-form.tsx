@@ -13,14 +13,21 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { updateUserProfile } from "@/lib/api/user";
 import { logout } from "@/lib/auth";
-import { faArrowRight, faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  faCheck,
+  faCircleNotch,
+  faPencil,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import type { ProfileResponse } from "@renegade-fanclub/types";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Label } from "@/components/ui/label";
 
 const FormSchema = z.object({
   email: z
@@ -44,6 +51,8 @@ export function SettingsForm({ profile }: SettingsFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const form = useForm<FormData>({
@@ -85,6 +94,44 @@ export function SettingsForm({ profile }: SettingsFormProps) {
     onChange(event);
   };
 
+  const avatarSubmit = async () => {
+    if (!selectedFile) return;
+    const fileUrl = selectedFile; // Upload avatar to Supabase storage then update link here
+    try {
+      setIsLoading(true);
+      await updateUserProfile({
+        avatar: fileUrl,
+      });
+      router.refresh();
+      toast({
+        title: "Success",
+        description: "Avatar updated successfully!",
+      });
+    } catch (error) {
+      console.error("Failed to update avatar:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update avatar. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+      setSelectedFile(null);
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && ["image/jpeg", "image/png"].includes(file.type)) {
+      setSelectedFile(URL.createObjectURL(file));
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Only JPG and PNG files are allowed.",
+      });
+    }
+  };
   return (
     <>
       {profile && (
@@ -93,6 +140,49 @@ export function SettingsForm({ profile }: SettingsFormProps) {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-6 w-full"
           >
+            <div className="flex flex-col items-center space-y-4 py-4">
+              <Label className="text-sm font-medium text-white">
+                Profile Image
+              </Label>
+              <input
+                type="file"
+                name="avatar"
+                accept="image/png, image/jpeg"
+                ref={fileInputRef}
+                className="hidden"
+                onChange={handleFileChange}
+              />
+              <div className="relative">
+                <Avatar
+                  className="h-28 w-28 border-2 border-white/10 cursor-pointer"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <AvatarImage
+                    src={selectedFile || profile?.avatar || undefined}
+                    alt={profile?.username || "User"}
+                  />
+                  <AvatarFallback className="bg-white/5 text-lg">
+                    {profile?.username?.[0]?.toUpperCase() || "U"}
+                  </AvatarFallback>
+                </Avatar>
+
+                {/* Edit Icon 
+                <FontAwesomeIcon
+                  icon={faPencil}
+                  className="absolute top-1 right-1 h-3 w-3 bg-white/80 p-1 rounded-full text-black shadow-md transition-colors cursor-pointer"
+                  title="Edit Avatar"
+                  onClick={() => fileInputRef.current?.click()}
+                /> */}
+              </div>
+
+              {selectedFile && (
+                <FontAwesomeIcon
+                  icon={isLoading ? faCircleNotch : faCheck}
+                  onClick={avatarSubmit}
+                  className={`bg-white p-2 rounded-full h-3 w-3 text-black cursor-pointer ${isLoading && "animate-spin"}`}
+                />
+              )}
+            </div>
             <FormField
               control={form.control}
               name="email"
