@@ -1,5 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
+@font-face {
+  font-family: "Jersey M54";
+  src: url("/fonts/Jersey M54.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -18,11 +26,11 @@
     --primary: 0 0 100%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 256 93% 33%;
+    --secondary: 111 100% 54%;
     --secondary-foreground: 0 0% 0%;
 
     /* theme color scheme */
-    --purple: 270 100% 59%;
+
     --purpleDark: 282.15 62.05% 38.24%;
     --orangeLight: 18.18 100% 74.12%;
     --midnight: 230.77 86.67% 2.94%;
