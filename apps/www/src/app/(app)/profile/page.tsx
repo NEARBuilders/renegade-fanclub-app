@@ -1,7 +1,36 @@
 export const dynamic = "force-dynamic";
-
 import { ProfileInfo } from "./_components/profile-info";
 import { Metadata } from "next";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { getUserQuests } from "@/lib/api/quests";
+import { getUserPredictions, getUserProfile } from "@/lib/api/user";
+import { listTeams } from "@/lib/api/teams";
+import { listGames } from "@/lib/api/games";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { Header } from "@/components/header";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheck,
+  faClock,
+  faCog,
+  faTrophy,
+  faX,
+} from "@fortawesome/free-solid-svg-icons";
+import { CopyLink } from "@/components/ui/copy-link";
+import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
 
 export const metadata: Metadata = {
   title: "My Profile | RNG Fan Club",
@@ -28,39 +57,6 @@ export const metadata: Metadata = {
   },
 };
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { getUserQuests } from "@/lib/api/quests";
-import { getUserPredictions, getUserProfile } from "@/lib/api/user";
-import { listTeams } from "@/lib/api/teams";
-import { listGames } from "@/lib/api/games";
-import { cn } from "@/lib/utils";
-import { headers } from "next/headers";
-import Link from "next/link";
-import { Header } from "@/components/header";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCheck,
-  faClock,
-  faCog,
-  faCopy,
-  faTrophy,
-  faX,
-} from "@fortawesome/free-solid-svg-icons";
-import { CopyLink } from "@/components/ui/copy-link";
-import { Button } from "@/components/ui/button";
-import { Container } from "@/components/ui/container";
-
 export default async function ProfilePage() {
   const [profile, completedQuests, predictions, teams, games] =
     await Promise.all([
@@ -74,8 +70,6 @@ export default async function ProfilePage() {
   // Create maps for team names and game details
   const teamMap = new Map(teams.map((team) => [team.id, team.name]));
   const gameMap = new Map(games.map((game) => [game.id, game]));
-
-  const origin = headers().get("origin") || "";
 
   return (
     <>
@@ -225,6 +219,11 @@ export default async function ProfilePage() {
               </div>
             </CardContent>
           </Card>
+          <CopyLink
+            title="Refer a Friend"
+            description="Earn more points"
+            link={"/invite?ref=" + profile.id}
+          />
         </div>
       </Container>
     </>
