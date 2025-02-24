@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { Toaster } from "@/components/ui/toaster";
+import { BackgroundImageMain } from "@/components/background-g-image";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -71,10 +72,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <div className="fixed inset-0 z-0">
+          {/* Base background image */}
+          <BackgroundImageMain />
+          {/* Overlay bg */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black from-10% to-transparent to-20% sm:from-10% sm:to-40% " />
+          <div className="absolute inset-0 bg-gradient-to-t from-black from-10% to-transparent to-30% sm:from-5% sm:to-40% " />
+        </div>
         <div
           className={cn(
-            "min-h-[100dvh] px-2 w-screen overflow-x-hidden relative ",
-            "bg-[radial-gradient(circle_at_center,_#2C0F40,_#01030E,_#000000)]",
+            "min-h-[100dvh] px-2 w-screen overflow-x-hidden relative",
+            "z-10",
           )}
         >
           <div className="h-full w-full">

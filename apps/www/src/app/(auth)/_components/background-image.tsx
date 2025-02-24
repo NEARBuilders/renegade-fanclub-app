@@ -8,24 +8,35 @@ export function BackgroundImage() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    // Add a dark background color that matches the image tone
-    <div className="relative w-full h-full bg-gray-900">
+    <div className="relative w-full h-full bg-black">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: isLoaded ? 1 : 0 }}
         transition={{ duration: 1.5, ease: "easeInOut" }}
-        className="relative w-full h-full"
+        className="relative flex flex-col w-full h-full items-center justify-center"
       >
         <Image
-          src="https://images.unsplash.com/photo-1556816214-6d16c62fbbf6?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          src={"/images/RNG-bg.png"}
           alt="Stadium at Night Background"
           fill
           priority
-          className="object-cover blur-sm"
+          className="object-cover opacity-40"
           unoptimized
           onLoad={() => setIsLoaded(true)}
         />
       </motion.div>
+
+      {/* Overlay Image */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/GFX-1.png"
+          alt="Overlay Graphic"
+          fill
+          className="object-cover"
+          unoptimized
+          onLoad={() => setIsLoaded(true)}
+        />
+      </div>
     </div>
   );
 }

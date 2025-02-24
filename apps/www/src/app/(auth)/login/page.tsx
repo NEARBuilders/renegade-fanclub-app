@@ -7,6 +7,7 @@ import { loginWithEmail, loginWithPhoneNumber } from "@/lib/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useRef, Suspense } from "react";
 import { Login } from "../_components/login";
+import { BackgroundImage } from "../_components/background-image";
 
 function LoginContent() {
   const searchParams = useSearchParams();
@@ -52,7 +53,14 @@ function LoginContent() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <div className="w-full max-w-sm space-y-4">
+      <div className="fixed inset-0">
+        {/* Base background image */}
+        <BackgroundImage />
+        {/* Overlay bg */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black from-20% to-transparent to-30% sm:from-10% sm:to-40% " />
+        <div className="absolute inset-0 bg-gradient-to-t from-black from-10% to-transparent to-30% sm:from-5% sm:to-40% " />
+      </div>
+      <div className="w-full max-w-sm space-y-4 z-10">
         <h1 className="text-2xl font-bold text-center">
           Sign in with {loginType === "email" ? "Email" : "Phone"}
         </h1>
