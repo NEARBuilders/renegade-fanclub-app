@@ -39,8 +39,8 @@ export function BottomNav() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 safe-area-inset bg-background/80 backdrop-blur-xl shadow-lg">
-      <div className="container mx-auto flex h-16 justify-center items-center gap-6 max-w-sm">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 safe-area-inset bg-gradient-to-b from-transparent to-black to-60%">
+      <div className="container py-2.5 mx-auto flex h-32 justify-center items-end gap-6 max-w-sm">
         {links.map((link) => {
           const isActive = currentPath === link.to;
           return (
@@ -52,7 +52,7 @@ export function BottomNav() {
                 "hover:scale-105 active:scale-95",
                 "touch-none select-none",
                 isActive
-                  ? "text-white after:absolute after:bottom-0 after:h-1 after:w-8 after:rounded-full after:bg-gradient-to-r after:from-secondary after:to-[#FFA37BB0]"
+                  ? "text-white after:absolute after:bottom-0 after:h-1 after:w-8 after:rounded-full after:bg-secondary"
                   : "text-white/60 hover:text-white/80",
               )}
             >
